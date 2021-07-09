@@ -1,5 +1,7 @@
 package hello.login.web.session;
 
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class SessionManager {
 
     public static final String SESSOIN_COOKIE_NAME = "mySessoinId";
@@ -40,7 +43,7 @@ public class SessionManager {
         if (sessionCookie == null) {
             return null;
         }
-        return sessionStore.get(sessionCookie.getValue());
+        return sessionStore.get(sessionCookie.getValue());//sessionCookie.getValue()는 UUID
     }
 
     /*
@@ -58,10 +61,8 @@ public class SessionManager {
             return null;
         }
         return Arrays.stream(request.getCookies())// Arrays.stream(배열) : 배열을 스트림으로 바꿔준다.
-                .filter(c->c.getName().equals(SESSOIN_COOKIE_NAME))
+                .filter(c->c.getName().equals(cookieName))
                 .findAny()
                 .orElse(null);
     }
-
-
 }
