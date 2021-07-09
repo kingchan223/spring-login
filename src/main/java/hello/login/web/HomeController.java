@@ -16,11 +16,6 @@ public class HomeController {
 
     private final MemberRepository memberRepository;
 
-//    @GetMapping("/")
-    public String home() {
-        return "home";
-    }
-
     @GetMapping("/")//
     public String homeLogin(@CookieValue(name="memberId", required = false) Long memberId, Model model){
         // required = false를 해줘야 로그인 안한 사용자도 들어올 수 있음
@@ -40,3 +35,10 @@ public class HomeController {
         return "loginHome";
     }
 }
+
+
+
+
+
+
+

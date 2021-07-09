@@ -25,9 +25,11 @@ public class MemberController {
 
     @PostMapping("/add")
     public String save(@Validated @ModelAttribute Member member, BindingResult bindingResult){
+        //입력오류가 있다면 다시 회원가입 폼으로
         if(bindingResult.hasErrors()){
             return "members/addMemberForm";
         }
+        //성공했다면 홈 화면으로
         memberRepository.save(member);
         return "redirect:/";
     }
