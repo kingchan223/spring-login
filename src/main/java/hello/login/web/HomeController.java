@@ -2,6 +2,7 @@ package hello.login.web;
 
 import hello.login.domain.member.Member;
 import hello.login.domain.member.MemberRepository;
+import hello.login.web.argumentResolver.Login;
 import hello.login.web.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,13 +78,25 @@ public class HomeController {
         return "loginHome";
     }
 
-    @GetMapping("/")
+//    @GetMapping("/")
     public String homeLoginV4spring(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
                                     Model model){
             /* 이제 얘네는 필요없다. */
 //        HttpSession session = request.getSession(false);
 //        if(session==null){return "home";}
 //        Member loginMember = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        //쿠키가 있는 사용자
+        if(loginMember==null){
+            return "home";
+        }
+        //세션이 유지되면 로그인으로 이동
+        model.addAttribute("member", loginMember);
+        return "loginHome";
+    }
+
+    @GetMapping("/")
+    public String homeLoginV4ArgumentResolver(@Login Member loginMember, Model model){
 
         //쿠키가 있는 사용자
         if(loginMember==null){
