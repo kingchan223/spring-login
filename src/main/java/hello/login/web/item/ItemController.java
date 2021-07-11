@@ -31,12 +31,7 @@ public class ItemController {
     private final ItemRepository itemRepository;
 
     @GetMapping
-    public String items(@SessionAttribute(name= SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
-                        Model model) {
-        if(loginMember==null){
-            return "redirect:/";
-        }
-
+    public String items(Model model) {
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
         return "items/items";
@@ -44,33 +39,22 @@ public class ItemController {
 
 
     @GetMapping("/{itemId}")
-    public String item(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
-                       @PathVariable long itemId, Model model) {
-        if(loginMember==null){
-            return "redirect:/";
-        }
+    public String item(@PathVariable long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         return "items/item";
     }
 
     @GetMapping("/add")
-    public String addForm(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
-                          Model model) {
-        if(loginMember==null){
-            return "redirect:/";
-        }
+    public String addForm(Model model) {
+
         model.addAttribute("item", new Item());
         return "items/addForm";
     }
 
     @PostMapping("/add")
-    public String addItem(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
-                          @Validated @ModelAttribute("item") ItemSaveForm form, BindingResult bindingResult,
+    public String addItem(@Validated @ModelAttribute("item") ItemSaveForm form, BindingResult bindingResult,
                           RedirectAttributes redirectAttributes) {
-        if(loginMember==null){
-            return "redirect:/";
-        }
 
         //특정 필드 예외가 아닌 전체 예외
         if (form.getPrice() != null && form.getQuantity() != null) {
@@ -98,11 +82,8 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}/edit")
-    public String editForm(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
-                           @PathVariable Long itemId, Model model) {
-        if(loginMember==null){
-            return "redirect:/";
-        }
+    public String editForm(@PathVariable Long itemId, Model model) {
+
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         return "items/editForm";
@@ -110,12 +91,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/edit")
     public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemUpdateForm form,
-                       @SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
                        BindingResult bindingResult) {
-        if(loginMember==null){
-            return "redirect:/";
-        }
-
         //특정 필드 예외가 아닌 전체 예외
         if (form.getPrice() != null && form.getQuantity() != null) {
             int resultPrice = form.getPrice() * form.getQuantity();
